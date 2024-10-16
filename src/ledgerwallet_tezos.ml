@@ -83,19 +83,21 @@ let int_of_ins = function
   | Make_deterministic_nonce -> 0x0E
   | Sign_with_hash -> 0x0F
 
-type curve = Ed25519 | Secp256k1 | Secp256r1 | Bip32_ed25519
+type curve = Ed25519 | Secp256k1 | Secp256r1 | Bip32_ed25519 | Bls12_381
 
 let pp_curve ppf = function
   | Ed25519 -> Format.pp_print_string ppf "ed25519"
   | Secp256k1 -> Format.pp_print_string ppf "secp256k1"
   | Secp256r1 -> Format.pp_print_string ppf "P-256"
   | Bip32_ed25519 -> Format.pp_print_string ppf "bip25519"
+  | Bls12_381 -> Format.pp_print_string ppf "bls"
 
 let pp_curve_short ppf = function
   | Ed25519 -> Format.pp_print_string ppf "ed"
   | Secp256k1 -> Format.pp_print_string ppf "secp"
   | Secp256r1 -> Format.pp_print_string ppf "p2"
   | Bip32_ed25519 -> Format.pp_print_string ppf "bip25519"
+  | Bls12_381 -> Format.pp_print_string ppf "bls"
 
 let curve_of_string str =
   match String.lowercase_ascii str with
@@ -103,6 +105,7 @@ let curve_of_string str =
   | "bip25519" | "bip32-ed25519" -> Some Bip32_ed25519
   | "secp256k1" -> Some Secp256k1
   | "p256" | "p-256" | "secp256r1" -> Some Secp256r1
+  | "bls" | "bls12-381" -> Some  Bls12_381
   | _ -> None
 
 let int_of_curve = function
@@ -110,12 +113,14 @@ let int_of_curve = function
   | Secp256k1 -> 0x01
   | Secp256r1 -> 0x02
   | Bip32_ed25519 -> 0x03
+  | Bls12_381 -> 0x04
 
 let curve_of_int = function
   | 0x00 -> Some Ed25519
   | 0x01 -> Some Secp256k1
   | 0x02 -> Some Secp256r1
   | 0x03 -> Some Bip32_ed25519
+  | 0x04 -> Some Bls12_381
   | _ -> None
 
 type Status.t += Tezos_invalid_curve_code of int | Payload_too_big of int

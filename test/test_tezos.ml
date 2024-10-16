@@ -62,6 +62,7 @@ let test_sign h curve =
       (*let pk = Tweetnacl.Sign.(pk pk) in
         check bool "sign Ed25519" true
           (Tweetnacl.Sign.verify_detached ~key:pk ~signature msg)*)
+  | Bls12_381 -> ()
   | Secp256k1 -> (
       let open Rresult in
       let out =
